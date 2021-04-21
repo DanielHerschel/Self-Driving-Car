@@ -10,8 +10,8 @@ public class CarController : MonoBehaviour
 
     private NeuralNet network;
     [Header("Network Options")]
-    public int LAYERS = 1;
-    public int NEURONS = 10;
+    public int LAYERS = 10;
+    public int NEURONS = 30;
 
     [Range(-1f, 1f)]
     public float acceleration, turn;
@@ -52,19 +52,21 @@ public class CarController : MonoBehaviour
     private void FixedUpdate()
     {
 
+        // Get the input from the sensors.
         InputSensors();
+
+        // Set the last position to this position.
         lastPosition = transform.position;
 
-        // Neural Network code here
-
+        // Get the acceleration and turn amount from the neural net.
         (acceleration, turn) = network.RunNN(forwardSensor, rightSensor, leftSensor);
 
+        // Move the care with the acceleration and turn amount we got from the nueral net.
         MoveCar(acceleration, turn);
 
+        // Add to time and calculate the fitness.
         timeSinceStart += Time.deltaTime;
         CalculateFitness();
-
-        // Reset acceleration and Turn
 
     }
 
