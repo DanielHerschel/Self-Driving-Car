@@ -218,7 +218,7 @@ public class GeneticAlgManager : MonoBehaviour
         // Loop through the new children.
         for (int i = 0; i < naturallySelected; i++)
         {
-            // Loop through their weights and mutate their genes.
+            // For each mutation matrix have a chance to mutate it.
             for (int j = 0; j < newPopulation[i].weights.Count; j++)
             {
                 if (Random.Range(0.0f, 1.0f) < mutationRate)

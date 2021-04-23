@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(NeuralNet))]
+//[RequireComponent(typeof(NeuralNet))]
 public class CarController : MonoBehaviour
 {
+
+    public bool learningMode = true;
 
     private Vector3 startPosition, startRotation;
 
@@ -42,7 +44,7 @@ public class CarController : MonoBehaviour
 
         startPosition = transform.position;
         startRotation = transform.eulerAngles;
-        network = GetComponent<NeuralNet>();
+        //network = GetComponent<NeuralNet>();
 
     }
 
@@ -100,7 +102,15 @@ public class CarController : MonoBehaviour
 
     private void Death()
     {
-        GameObject.FindObjectOfType<GeneticAlgManager>().Death(overallFitness, network);
+
+        if (learningMode)
+        {
+            GameObject.FindObjectOfType<GeneticAlgManager>().Death(overallFitness, network);
+            return;
+        }
+
+        Reset();
+
     }
 
     /// <summary>
@@ -126,18 +136,21 @@ public class CarController : MonoBehaviour
         overallFitness = (totalDistanceDriven * distanceMultiplier) + (avgSpeed * avgSpeedMultiplier) + (((rightSensor + forwardSensor + leftSensor) / 3) * sensorMultiplier);
         //overallFitness *= (Mathf.Abs(acceleration) / acceleration);
 
-        if (timeSinceStart > barTime && overallFitness < barFitness)
+        if (learningMode)
         {
-            Death();
-        }
+            if (timeSinceStart > barTime && overallFitness < barFitness)
+            {
+                Death();
+            }
 
-        // CHANGE THIS TO 1000!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-        if (overallFitness >= 1000)
-        {
-            // Save the network to a JSON file
-            Debug.Log("Found best agent");
-            
-            Death();
+            // CHANGE THIS TO 1000!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+            if (overallFitness >= 1000)
+            {
+                // Save the network to a JSON file
+                Debug.Log("Found best agent");
+
+                Death();
+            }
         }
 
     }

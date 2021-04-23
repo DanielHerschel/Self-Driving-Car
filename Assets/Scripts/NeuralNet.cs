@@ -6,7 +6,7 @@ using MathNet.Numerics.LinearAlgebra;
 
 using Random = UnityEngine.Random;
 
-public class NeuralNet : MonoBehaviour
+public class NeuralNet
 {
 
     // Nodes
@@ -31,6 +31,32 @@ public class NeuralNet : MonoBehaviour
             return 1;
         else
             return fitness.CompareTo(other.fitness) > 0 ? 1 : (fitness.CompareTo(other.fitness) < 0 ? -1 : 0);
+    }
+
+    /// <summary>
+    /// Create a new NeuralNet object that is a copy of the current one.
+    /// </summary>
+    /// <returns>Copy of the current NeuralNet object.</returns>
+    public NeuralNet CopyNeuralNet(int hiddenLayerCount, int hiddenNeuronCount)
+    {
+
+        NeuralNet copy = new NeuralNet();
+        List<Matrix<float>> newWeights = new List<Matrix<float>>();
+        List<float> newBiases = new List<float>(biases);
+
+        for (int i = 0; i < weights.Count; i++)
+        {
+            Matrix<float> copyOfWeights = Matrix<float>.Build.Dense(weights[i].RowCount, weights[i].ColumnCount);
+            weights[i].CopyTo(copyOfWeights);
+            newWeights.Add(copyOfWeights);
+        }
+
+        copy.weights = newWeights;
+        copy.biases = newBiases;
+        copy.InitializeHidden(hiddenLayerCount, hiddenNeuronCount);
+
+        return copy;
+
     }
 
     /// <summary>
@@ -68,35 +94,10 @@ public class NeuralNet : MonoBehaviour
         }
 
         Matrix<float> outputWeight = Matrix<float>.Build.Dense(hiddenNeuronCount, 2);
+        weights.Add(outputWeight);
         biases.Add(Random.Range(-1f, 1f));
 
         RandomizeWeights();
-
-    }
-
-    /// <summary>
-    /// Create a new NeuralNet object that is a copy of the current one.
-    /// </summary>
-    /// <returns>Copy of the current NeuralNet object.</returns>
-    public NeuralNet CopyNeuralNet(int hiddenLayerCount, int hiddenNeuronCount)
-    {
-
-        NeuralNet copy = new NeuralNet();
-        List<Matrix<float>> newWeights = new List<Matrix<float>>();
-        List<float> newBiases = new List<float>(biases);
-
-        for (int i = 0; i < weights.Count; i ++)
-        {
-            Matrix<float> copyOfWeights = Matrix<float>.Build.Dense(weights[i].RowCount, weights[i].ColumnCount);
-            weights[i].CopyTo(copyOfWeights);
-            newWeights.Add(copyOfWeights);
-        }
-
-        copy.weights = newWeights;
-        copy.biases = newBiases;
-        copy.InitializeHidden(hiddenLayerCount, hiddenNeuronCount);
-
-        return copy;
 
     }
 
@@ -114,11 +115,6 @@ public class NeuralNet : MonoBehaviour
             hiddenLayers.Add(tempMatrix);
         }
 
-    }
-
-    internal static Array CompareTo()
-    {
-        throw new NotImplementedException();
     }
 
     /// <summary>
