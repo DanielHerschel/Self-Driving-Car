@@ -1,0 +1,12 @@
+{
+  "name": "com.needle.auto-installer",
+  "displayName": "Auto Installer",
+  "version": "0.2.0",
+  "author": {
+    "name": "Needle",
+    "email": "hi@needle.tools",
+    "url": "https://needle.tools"
+  },
+  "unity": "2018.4",
+  "description": "Creates automatic, drop-in installers for Unity packages."
+}

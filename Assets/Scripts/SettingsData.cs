@@ -22,12 +22,13 @@ public class SettingsData : MonoBehaviour
     [Range(0.0f, 1.0f)] public float mutationRate = 0.055f;
 
     // Test mode
-    public NeuralNet testModeLoadedNeuralNet;
+    public ModelSaveData testModeLoadedNeuralNet;
+    public UICanvas uic;
 
     [Header("Simulation Settings")]
     private GeneticAlgManager geneticAlgManager;
     private CarController carController;
-    private bool testModeSetup = false; // Will be true after setup is complete.
+    private bool setup = false; // Will be true after setup is complete.
 
 
     private void Awake()
@@ -40,24 +41,70 @@ public class SettingsData : MonoBehaviour
     private void FixedUpdate()
     {
         
-        // Things to do in the main menu.
-        if (SceneManager.GetActiveScene().name == "Menu")
+        if (SceneManager.GetActiveScene().name == "MainMenu") // Things to do in the main menu.
         {
-            MainMenuHandling();
-            return;
+            MainMenuSetup();
         }
-
-        // Things to do outside the main menu.
-        if (!testModeSetup && !learningMode)
-            TestModeSetup();
+        else // Things to do outside the main menu.
+        {
+            if (!setup)
+                if (learningMode)
+                    LearnModeSetup();
+                else
+                    TestModeSetup();
+        }
 
     }
 
     /// <summary>
     /// Things to handle in the main menu.
     /// </summary>
-    private void MainMenuHandling()
+    private void MainMenuSetup()
     {
+
+        setup = false;
+
+    }
+
+    /// <summary>
+    /// Things to handle in the learn mode.
+    /// </summary>
+    private void LearnModeSetup()
+    {
+
+        carController = GameObject.Find("Car").GetComponent<CarController>();
+        geneticAlgManager = GameObject.Find("GeneticManager").GetComponent<GeneticAlgManager>();
+
+        // Apply settings.
+        ApplyCarSettings();
+        ApplyGeneticAlgManagerSettings();
+
+        setup = true;
+
+    }
+
+    /// <summary>
+    /// Apply car settings.
+    /// </summary>
+    public void ApplyCarSettings()
+    {
+
+        carController.learningMode = true;
+        carController.LAYERS = hiddenLayerCount;
+        carController.NEURONS = hiddenLayerNeuronCount;
+        carController.distanceMultiplier = distanceMultiplier;
+        carController.avgSpeedMultiplier = avgSpeedMultiplier;
+        carController.sensorMultiplier = sensorMultiplier;
+
+    }
+
+    /// <summary>
+    /// Apply genetic algorithm settings.
+    /// </summary>
+    public void ApplyGeneticAlgManagerSettings()
+    {
+
+        geneticAlgManager.mutationRate = mutationRate;
 
     }
 
@@ -69,19 +116,23 @@ public class SettingsData : MonoBehaviour
 
         carController = GameObject.Find("Car").GetComponent<CarController>();
         geneticAlgManager = GameObject.Find("GeneticManager").GetComponent<GeneticAlgManager>();
+        uic = GameObject.Find("Canvas").GetComponent<UICanvas>();
+
+        uic.currentGeneration = testModeLoadedNeuralNet.generationNumber;
+        uic.currentGenome = testModeLoadedNeuralNet.genomeNumber;
 
         geneticAlgManager.gameObject.SetActive(false);
 
         carController.learningMode = false;
 
         // TEMP --->
-        testModeLoadedNeuralNet = new NeuralNet();
-        testModeLoadedNeuralNet.InitializeNN(carController.LAYERS, carController.NEURONS);
+        testModeLoadedNeuralNet.neuralNet = new NeuralNet();
+        testModeLoadedNeuralNet.neuralNet.InitializeNN(carController.LAYERS, carController.NEURONS);
         // -------->
 
-        carController.ResetCarWithNetwork(testModeLoadedNeuralNet);
+        carController.ResetCarWithNetwork(testModeLoadedNeuralNet.neuralNet);
 
-        testModeSetup = true;
+        setup = true;
 
     }
 

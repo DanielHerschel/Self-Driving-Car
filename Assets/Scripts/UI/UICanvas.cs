@@ -11,6 +11,8 @@ public class UICanvas : MonoBehaviour
     public GeneticAlgManager geneticAlgManager;
 
     [Header("UI Info")]
+    private bool leariningMode = true;
+
     // Genetic algorithm info
     public int currentGeneration;
     public int currentGenome;
@@ -84,11 +86,14 @@ public class UICanvas : MonoBehaviour
     private void GetInfoFromObjects()
     {
 
-        // Get the genetic algorithm info
-        currentGeneration = geneticAlgManager.currentGeneration;
-        currentGenome = geneticAlgManager.currentGenome;
-        initialPopulation = geneticAlgManager.initialPopulation;
-        bestOfPopulation = geneticAlgManager.bestOfPopulation;
+        if (leariningMode)
+        {
+            // Get the genetic algorithm info
+            currentGeneration = geneticAlgManager.currentGeneration;
+            currentGenome = geneticAlgManager.currentGenome;
+            initialPopulation = geneticAlgManager.initialPopulation;
+            bestOfPopulation = geneticAlgManager.bestOfPopulation;
+        }
 
         // Get the neural network info
         hiddenLayerCount = carController.LAYERS;

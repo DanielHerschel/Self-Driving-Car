@@ -1,5 +1,11 @@
 {
   "dependencies": {
+    "com.needle.auto-installer": {
+      "version": "file:installer.jillejr.newtonsoft.json-for-unity",
+      "depth": 0,
+      "source": "embedded",
+      "dependencies": {}
+    },
     "com.unity.collab-proxy": {
       "version": "1.3.9",
       "depth": 0,

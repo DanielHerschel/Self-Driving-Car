@@ -1714,7 +1714,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 8
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 30, y: 45, z: 0}
 --- !u!1001 &375846975
 PrefabInstance:
@@ -8173,80 +8173,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!1001 &1831840375163045853
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 1831840374750981400, guid: d54a3485a4d89db4188ab55c78d557a8,
-        type: 3}
-      propertyPath: m_Name
-      value: SettingsManager
-      objectReference: {fileID: 0}
-    - target: {fileID: 1831840374750981402, guid: d54a3485a4d89db4188ab55c78d557a8,
-        type: 3}
-      propertyPath: m_RootOrder
-      value: 7
-      objectReference: {fileID: 0}
-    - target: {fileID: 1831840374750981402, guid: d54a3485a4d89db4188ab55c78d557a8,
-        type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 35.735992
-      objectReference: {fileID: 0}
-    - target: {fileID: 1831840374750981402, guid: d54a3485a4d89db4188ab55c78d557a8,
-        type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 20.107983
-      objectReference: {fileID: 0}
-    - target: {fileID: 1831840374750981402, guid: d54a3485a4d89db4188ab55c78d557a8,
-        type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 187.89001
-      objectReference: {fileID: 0}
-    - target: {fileID: 1831840374750981402, guid: d54a3485a4d89db4188ab55c78d557a8,
-        type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1831840374750981402, guid: d54a3485a4d89db4188ab55c78d557a8,
-        type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1831840374750981402, guid: d54a3485a4d89db4188ab55c78d557a8,
-        type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1831840374750981402, guid: d54a3485a4d89db4188ab55c78d557a8,
-        type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1831840374750981402, guid: d54a3485a4d89db4188ab55c78d557a8,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1831840374750981402, guid: d54a3485a4d89db4188ab55c78d557a8,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1831840374750981402, guid: d54a3485a4d89db4188ab55c78d557a8,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1831840374750981403, guid: d54a3485a4d89db4188ab55c78d557a8,
-        type: 3}
-      propertyPath: learningMode
-      value: 1
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: d54a3485a4d89db4188ab55c78d557a8, type: 3}
 --- !u!81 &2170195047455693739
 AudioListener:
   m_ObjectHideFlags: 0
@@ -9611,7 +9537,7 @@ LODGroup:
   m_AnimateCrossFading: 0
   m_LastLODIsBillboard: 0
   m_LODs:
-  - screenRelativeHeight: 0.29621178
+  - screenRelativeHeight: 0.28278023
     fadeTransitionWidth: 0
     renderers:
     - renderer: {fileID: 4915964047514110351}
@@ -9647,7 +9573,7 @@ LODGroup:
     - renderer: {fileID: 4915964047256265967}
     - renderer: {fileID: 4915964047831709061}
     - renderer: {fileID: 4915964047281520532}
-  - screenRelativeHeight: 0.015313894
+  - screenRelativeHeight: 0.016210323
     fadeTransitionWidth: 0
     renderers:
     - renderer: {fileID: 4915964047730829597}
@@ -9749,8 +9675,8 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1.5031929, y: 1.2000847, z: 4.2573204}
-  m_Center: {x: -0.021539688, y: 0.69660854, z: -0.0049991608}
+  m_Size: {x: 1.484766, y: 1.2000847, z: 4.2573204}
+  m_Center: {x: -0.030753136, y: 0.69660854, z: -0.0049991608}
 --- !u!114 &4915964046350808189
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9764,8 +9690,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   learningMode: 1
-  LAYERS: 15
-  NEURONS: 40
+  LAYERS: 10
+  NEURONS: 30
   acceleration: -0.11
   turn: 0.12
   maxSpeed: 18

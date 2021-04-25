@@ -1,6 +1,8 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 //[RequireComponent(typeof(NeuralNet))]
 public class CarController : MonoBehaviour
@@ -149,8 +151,12 @@ public class CarController : MonoBehaviour
                 // Save the network to a JSON file
                 Debug.Log("Found best agent");
 
-                Death();
+
+
+                SceneManager.LoadScene("MainMenu");
             }
+        } else
+        {
         }
 
     }
