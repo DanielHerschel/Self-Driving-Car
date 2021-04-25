@@ -9,6 +9,7 @@ public class CarController : MonoBehaviour
 {
 
     public bool learningMode = true;
+    public bool saved = false;
 
     private Vector3 startPosition, startRotation;
 
@@ -146,17 +147,16 @@ public class CarController : MonoBehaviour
             }
 
             // CHANGE THIS TO 1000!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-            if (overallFitness >= 1000)
+            if (overallFitness >= 1000 && !saved)
             {
                 // Save the network to a JSON file
                 Debug.Log("Found best agent");
 
+                network.SaveWeights();
+                SaveSystem.SaveCar(network);
 
-
-                SceneManager.LoadScene("MainMenu");
+                saved = true;
             }
-        } else
-        {
         }
 
     }

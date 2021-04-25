@@ -6,6 +6,62 @@ using MathNet.Numerics.LinearAlgebra;
 
 using Random = UnityEngine.Random;
 
+[Serializable]
+public class TwoDArray
+{
+
+    public OneDArray[] array;
+
+    public void ToTwoDArray(float[,] arr)
+    {
+
+        array = new OneDArray[arr.GetLength(0)];
+
+
+        for (int i = 0; i < arr.GetLength(0); i++)
+        {
+            array[i] = new OneDArray();
+            array[i].array = new float[arr.GetLength(1)];
+
+            for (int j = 0; j < arr.GetLength(1); j++)
+            {
+                array[i].array[j] = arr[i, j];
+            }
+
+        }
+
+    }
+
+    public float[,] ToArr()
+    {
+
+        float[,] outArr = new float[array.Length, array[0].array.Length];
+
+        for (int i = 0; i < array.Length; i++)
+        {
+
+            for (int j = 0; j < array[0].array.Length; j++)
+            {
+                outArr[i,j] = array[i].array[j];
+            }
+
+        }
+
+        return outArr;
+
+    }
+
+}
+
+[Serializable]
+public class OneDArray
+{
+
+    public float[] array;
+
+}
+
+[Serializable]
 public class NeuralNet
 {
 
@@ -17,6 +73,9 @@ public class NeuralNet
     // Weights and Biases
     public List<Matrix<float>> weights = new List<Matrix<float>>();
     public List<float> biases = new List<float>();
+
+    // Better way to save the weights
+    public List<TwoDArray> arrayWeights = new List<TwoDArray>();
 
     public float fitness;
 
@@ -31,6 +90,40 @@ public class NeuralNet
             return 1;
         else
             return fitness.CompareTo(other.fitness) > 0 ? 1 : (fitness.CompareTo(other.fitness) < 0 ? -1 : 0);
+    }
+
+    /// <summary>
+    /// Copy the list of matrices to a list of 2d arrays.
+    /// </summary>
+    public void SaveWeights()
+    {
+
+        arrayWeights.Clear();
+
+        for (int i = 0; i < weights.Count; i++)
+        {
+            TwoDArray temp = new TwoDArray();
+            float[,] arr = weights[i].ToArray();
+            temp.ToTwoDArray(arr);
+            arrayWeights.Add(temp);
+
+        }
+
+    }
+
+    /// <summary>
+    /// Copy the list of 2d arrays to a list of matrices.
+    /// </summary>
+    public void LoadWeights()
+    {
+
+        weights.Clear();
+
+        for (int i = 0; i < arrayWeights.Count; i++)
+        {
+            weights.Add(Matrix<float>.Build.DenseOfArray(arrayWeights[i].ToArr()));
+        }
+
     }
 
     /// <summary>

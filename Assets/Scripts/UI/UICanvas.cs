@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class UICanvas : MonoBehaviour
@@ -118,6 +119,21 @@ public class UICanvas : MonoBehaviour
         hiddenLayerCountText.text = "Hidden Layer Count: " + hiddenLayerCount;
         neuronsCountText.text = "Neurons Per Hidden Layer Count: " + neuronsCount;
         currentGenomeFitnessText.text = "Current Genome Fitness: " + currentGenomeFitness;
+
+    }
+
+    // <--------------------------------> Button Functions <-------------------------------->
+
+    public void Quit()
+    {
+
+        timeSpeedSlider.value = 1f;
+        Time.timeScale = 1f;
+
+        GameObject s = GameObject.Find("SettingsManager");
+        Destroy(s);
+
+        SceneManager.LoadScene("MainMenu");
 
     }
 

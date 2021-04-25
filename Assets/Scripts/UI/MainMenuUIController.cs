@@ -32,6 +32,8 @@ public class MainMenuUIController : MonoBehaviour
     void Start()
     {
 
+        Time.timeScale = 1f;
+
         settingsData = GameObject.Find("SettingsManager").GetComponent<SettingsData>();
 
         try
@@ -92,7 +94,7 @@ public class MainMenuUIController : MonoBehaviour
 
         try
         {
-            //ModelSaveData op = SaveSystem.LoadNeuralNetData();
+            NeuralNet op = SaveSystem.LoadCar();
 
             if(op == null)
             {
@@ -100,8 +102,10 @@ public class MainMenuUIController : MonoBehaviour
                 savedModelStatusText.text = "Could not load saved model";
             } else
             {
+
                 canStart = true;
                 savedModelStatusText.text = "Saved model ready for testing";
+                settingsData.testModeLoadedNeuralNet = op;
             }
 
         }

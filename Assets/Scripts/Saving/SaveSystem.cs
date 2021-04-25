@@ -45,4 +45,45 @@ public static class SaveSystem
 
     }
 
+    public static void SaveCar(NeuralNet nn)
+    {
+
+        BinaryFormatter formatter = new BinaryFormatter();
+
+        string path = Application.persistentDataPath + "/model.neuralnet";
+        FileStream stream = new FileStream(path, FileMode.Create);
+
+        string json = JsonUtility.ToJson(nn);
+
+        formatter.Serialize(stream, json);
+        stream.Close();
+
+
+    }
+
+    public static NeuralNet LoadCar()
+    {
+
+        string path = Application.persistentDataPath + "/model.neuralnet";
+        if (File.Exists(path))
+        {
+
+            BinaryFormatter formatter = new BinaryFormatter();
+            FileStream stream = new FileStream(path, FileMode.Open);
+
+            string json = formatter.Deserialize(stream) as string;
+            NeuralNet data = JsonUtility.FromJson<NeuralNet>(json);
+            stream.Close();
+
+            return data;
+
+        }
+        else
+        {
+            Debug.Log("Save file not found in " + path);
+            return null;
+        }
+
+    }
+
 }

@@ -22,13 +22,13 @@ public class SettingsData : MonoBehaviour
     [Range(0.0f, 1.0f)] public float mutationRate = 0.055f;
 
     // Test mode
-    public ModelSaveData testModeLoadedNeuralNet;
+    public NeuralNet testModeLoadedNeuralNet;
     public UICanvas uic;
 
     [Header("Simulation Settings")]
     private GeneticAlgManager geneticAlgManager;
     private CarController carController;
-    private bool setup = false; // Will be true after setup is complete.
+    public bool setup = false; // Will be true after setup is complete.
 
 
     private void Awake()
@@ -114,25 +114,28 @@ public class SettingsData : MonoBehaviour
     private void TestModeSetup()
     {
 
+        setup = true;
+
         carController = GameObject.Find("Car").GetComponent<CarController>();
         geneticAlgManager = GameObject.Find("GeneticManager").GetComponent<GeneticAlgManager>();
-        uic = GameObject.Find("Canvas").GetComponent<UICanvas>();
-
-        uic.currentGeneration = testModeLoadedNeuralNet.generationNumber;
-        uic.currentGenome = testModeLoadedNeuralNet.genomeNumber;
 
         geneticAlgManager.gameObject.SetActive(false);
 
         carController.learningMode = false;
 
         // TEMP --->
-        testModeLoadedNeuralNet.neuralNet = new NeuralNet();
-        testModeLoadedNeuralNet.neuralNet.InitializeNN(carController.LAYERS, carController.NEURONS);
+        // testModeLoadedNeuralNet = new NeuralNet();
+        // testModeLoadedNeuralNet.InitializeNN(carController.LAYERS, carController.NEURONS);
         // -------->
 
-        carController.ResetCarWithNetwork(testModeLoadedNeuralNet.neuralNet);
+        testModeLoadedNeuralNet.LoadWeights();
 
-        setup = true;
+        NeuralNet net = new NeuralNet();
+        net.InitializeNN(carController.LAYERS, carController.NEURONS);
+        net.weights = testModeLoadedNeuralNet.weights;
+        net.biases = testModeLoadedNeuralNet.biases;
+
+        carController.ResetCarWithNetwork(net);  
 
     }
 
