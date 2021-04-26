@@ -190,7 +190,7 @@ public class NeuralNet
         weights.Add(outputWeight);
         biases.Add(Random.Range(-1f, 1f));
 
-        RandomizeWeights();
+        RandomizeWeights(); // O(n^3)
 
     }
 

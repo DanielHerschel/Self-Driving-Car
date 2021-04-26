@@ -35,13 +35,19 @@ public class GeneticAlgManager : MonoBehaviour
     public float totalAverageFitness = 0;
     private float sumOfFitnesses = 0;
 
+    /// <summary>
+    /// Will be called before the first frame.
+    /// </summary>
     private void Start()
     {
 
         CreatePopulation();
 
     }
-
+    
+    /// <summary>
+    /// Initialize a population with random neural nets.
+    /// </summary>
     private void CreatePopulation()
     {
 
@@ -51,6 +57,11 @@ public class GeneticAlgManager : MonoBehaviour
 
     }
 
+    /// <summary>
+    /// Fill empty places in a population with random neural nets.
+    /// </summary>
+    /// <param name="newPopulation">Population to add to</param>
+    /// <param name="startingIndex">From which index to start filling the population.</param>
     private void FillPopulationWithRandomValues(NeuralNet[] newPopulation, int startingIndex)
     {
 
@@ -63,6 +74,9 @@ public class GeneticAlgManager : MonoBehaviour
 
     }
 
+    /// <summary>
+    /// Reset the car with a given neural net.
+    /// </summary>
     private void ResetToCurrentGenome()
     {
 
@@ -70,46 +84,64 @@ public class GeneticAlgManager : MonoBehaviour
 
     }
 
+    /// <summary>
+    /// When a car dies this will be called.
+    /// </summary>
+    /// <param name="fitness">Fitness of the dead car.</param>
+    /// <param name="network">The neural net of the dead car.</param>
     public void Death(float fitness, NeuralNet network)
     {
 
+        // If we haven't gotten to the last genome in the generation.
         if (currentGenome < population.Length - 1)
         {
+            // Go to the next genome.
             population[currentGenome].fitness = fitness;
             population[currentGenome] = network;
             currentGenome++;
             ResetToCurrentGenome();
-        } else
+        } else // If we ran all the genomes.
         {
             Repopulate();
         }
 
     }
 
+    /// <summary>
+    /// Handle the repopulation.
+    /// </summary>
     private void Repopulate()
     {
-
-        genePool.Clear();
-        currentGeneration++;
+        
+        genePool.Clear(); // Empty gene pool.
+        currentGeneration++; // Increase generation.
         naturallySelected = 0;
-        SortPopulation();
-        bestOfPopulation = population[0].fitness;
+
+        SortPopulation(); // Sort the population (bubble sort).
+        bestOfPopulation = population[0].fitness; // Find best of population.
+
+        // Find the average fitness.
         sumOfFitnesses += bestOfPopulation;
         totalAverageFitness = sumOfFitnesses / currentGeneration;
 
+        // Create a new population with the picked genomes.
         NeuralNet[] newPopulation = PickPopulation();
 
-        Crossover(newPopulation);
-        Mutate(newPopulation);
+        Crossover(newPopulation); // Make the crossover.
+        Mutate(newPopulation); // Mutate the new generation.
 
-        FillPopulationWithRandomValues(newPopulation, naturallySelected);
+        FillPopulationWithRandomValues(newPopulation, naturallySelected); // Fill empty spaces with random neural nets.
 
         population = newPopulation;
         currentGenome = 0;
-        ResetToCurrentGenome();
+        ResetToCurrentGenome(); // Start the simulation of the current generation.
 
     }
 
+    /// <summary>
+    /// Find the best cars and the worst cars, put them in a new array and add them to the gene pool.
+    /// </summary>
+    /// <returns>Neural Net array of the new population.</returns>
     private NeuralNet[] PickPopulation()
     {
 
@@ -122,6 +154,7 @@ public class GeneticAlgManager : MonoBehaviour
             newPopulation[naturallySelected].fitness = 0;
             naturallySelected++;
 
+            // Add to gene pool.
             int timesToAddToGenePool = Mathf.RoundToInt(population[i].fitness * 10);
             for (int j = 0; j < timesToAddToGenePool; j++)
             {
@@ -136,6 +169,7 @@ public class GeneticAlgManager : MonoBehaviour
             int last = population.Length - 1;
             last -= i;
 
+            // Add to gene pool.
             int timesToAddToGenePool = Mathf.RoundToInt(population[last].fitness * 10);
             for (int j = 0; j < timesToAddToGenePool; j++)
             {
@@ -148,10 +182,18 @@ public class GeneticAlgManager : MonoBehaviour
 
     }
 
+    /// <summary>
+    /// Make the crossover.
+    /// </summary>
+    /// <param name="newPopulation">Array of the new population to be crossed over into.</param>
     private void Crossover(NeuralNet[] newPopulation)
     {
+
+        // If the gene pool has more than 1 agent.
         if (genePool.Count > 1)
         {
+
+            // Fill the generation with new children.
             for (int i = naturallySelected; i < numberToCrossover; i += 2)
             {
                 int AIndex = 1; // Index of the first parent.
@@ -212,6 +254,10 @@ public class GeneticAlgManager : MonoBehaviour
 
     }
 
+    /// <summary>
+    /// Mutate the new population.
+    /// </summary>
+    /// <param name="newPopulation">Array of the new population to be mutated.</param>
     private void Mutate(NeuralNet[] newPopulation)
     {
 
@@ -221,7 +267,7 @@ public class GeneticAlgManager : MonoBehaviour
             // For each mutation matrix have a chance to mutate it.
             for (int j = 0; j < newPopulation[i].weights.Count; j++)
             {
-                if (Random.Range(0.0f, 1.0f) < mutationRate)
+                if (Random.Range(0.0f, 1.0f) < mutationRate) // If going to mutate.
                 {
                     newPopulation[i].weights[j] = MutateMatrix(newPopulation[i].weights[j]);
                 }
@@ -230,18 +276,26 @@ public class GeneticAlgManager : MonoBehaviour
 
     }
 
+    /// <summary>
+    /// Mutate a given matrix.
+    /// </summary>
+    /// <param name="matrixToMutate">Matrix to mutate</param>
+    /// <returns>A mutated matrix.</returns>
     private Matrix<float> MutateMatrix(Matrix<float> matrixToMutate)
     {
 
+        // How much of the matrix should we mutate (random for each matrix).
         int amountToMutate = Random.Range(1, (int)((matrixToMutate.RowCount * matrixToMutate.ColumnCount) * mutationAmountMultiplier));
 
         Matrix<float> newWeights = Matrix<float>.Build.DenseOfMatrix(matrixToMutate);
 
+        // Go over the matrix.
         for (int i = 0; i < amountToMutate; i++)
         {
             int randomRow = Random.Range(0, newWeights.RowCount - 1);
             int randomColumn = Random.Range(0, newWeights.ColumnCount - 1);
 
+            // Add or subtract a tiny bit from the current value.
             newWeights[randomRow, randomColumn] = Mathf.Clamp(newWeights[randomRow, randomColumn] + Random.Range(-1f, 1f), -1f, 1f);
         }
 
@@ -254,10 +308,6 @@ public class GeneticAlgManager : MonoBehaviour
     /// </summary>
     private void SortPopulation()
     {
-
-        //Array.Sort(population, new Comparison<NeuralNet>((c, o) => c.CompareTo(o)));
-
-        // TODO: different sort of bubblesort.
 
         for (int i = 0; i < population.Length; i++)
         {
